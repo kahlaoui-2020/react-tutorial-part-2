@@ -1,25 +1,8 @@
-import styled from 'styled-components';
-import DefaultPicture from '../assets/profile.png';
-import Card from '../components/Card';
-import colors from '../utils/style/colors';
-
-const freelanceProfiles = [
-  {
-    name: 'Jane Doe',
-    jobTitle: 'Devops',
-    picture: DefaultPicture,
-  },
-  {
-    name: 'John Doe',
-    jobTitle: 'Developpeur frontend',
-    picture: DefaultPicture,
-  },
-  {
-    name: 'Jeanne Biche',
-    jobTitle: 'Développeuse Fullstack',
-    picture: DefaultPicture,
-  },
-];
+import styled from "styled-components";
+import Card from "../components/Card";
+import { useFetch, useTheme } from "../utils/hooks";
+import colors from "../utils/style/colors";
+import { Loader } from "../utils/style/Loader";
 const CardsContainer = styled.div`
   display: grid;
   gap: 24px;
@@ -31,7 +14,7 @@ const CardsContainer = styled.div`
 `;
 const PageTitle = styled.h1`
   font-size: 30px;
-  color: black;
+  color: ${({ theme }) => (theme = "light" ? colors.dark : colors.light)};
   text-align: center;
   padding-bottom: 30px;
 `;
@@ -42,29 +25,53 @@ const PageSubtitle = styled.h2`
   text-align: center;
   padding-bottom: 30px;
 `;
-const FreelancesWrapper = styled.div`
+const FreelancesContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: -webkit-fill-available
+  height: -webkit-fill-available;
 `;
+const LoaderWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 function Freelances() {
+  const { theme } = useTheme();
+  const { isLoading, data, error } = useFetch(
+    "http://localhost:8000/freelances"
+  );
+  const { freelancersList } = data;
+
+  if (error) return <span>Oups Error</span>;
   return (
-    <FreelancesWrapper>
-      <PageTitle>Trouver votre prestataire</PageTitle>
-      <PageSubtitle>
+    <FreelancesContainer>
+      <PageTitle theme={theme}>Trouver votre prestataire</PageTitle>
+      <PageSubtitle theme={theme}>
         Chez Shiny nous réunissons les meilleurs profils pour vous.
       </PageSubtitle>
-      <CardsContainer>
-        {freelanceProfiles.map((profile, index) => (
-          <Card
-            key={`${profile.name}-${index}`}
-            label={profile.jobTitle}
-            picture={profile.picture}
-            title={profile.name}
-          />
-        ))}
-      </CardsContainer>
-    </FreelancesWrapper>
+      {isLoading ? (
+        <LoaderWrapper>
+          <Loader theme={theme} data-testid="loader" />
+        </LoaderWrapper>
+      ) : (
+        <CardsContainer>
+          {freelancersList ? (
+            freelancersList.map(profile => (
+              <Card
+                key={profile.id}
+                label={profile.job}
+                picture={profile.picture}
+                title={profile.name}
+              />
+            ))
+          ) : (
+            <span>
+              Test failed:{isLoading} {JSON.stringify(typeof freelancersList)}
+            </span>
+          )}
+        </CardsContainer>
+      )}
+    </FreelancesContainer>
   );
 }
 export default Freelances;

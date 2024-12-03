@@ -1,8 +1,7 @@
-import styled from 'styled-components';
-import { StyledLink } from '../utils/style/StyledLink';
-import colors from '../utils/style/colors';
-import HomeIllustration from '../assets/home-illustration.svg';
-import { useEffect } from 'react';
+import styled from "styled-components";
+import HomeIllustration from "../assets/home-illustration.svg";
+import { StyledLink } from "../utils/style/StyledLink";
+import colors from "../utils/style/colors";
 const HomeWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -21,7 +20,7 @@ const LeftCol = styled.div`
   justify-content: center;
   flex: 1;
   ${StyledLink} {
-    max-width: 200px
+    max-width: 200px;
   }
 `;
 const StyledTitle = styled.h2`
@@ -33,16 +32,6 @@ const Illustration = styled.img`
   flex: 1;
 `;
 function Home() {
-  useEffect(() => {
-    fetch('https://6hgz5l-3000.csb.app/')
-      .then((res) => {
-        console.log(res);
-        return res.json();
-      })
-      .catch((data) => {
-        console.log(data);
-      });
-  });
   return (
     <HomeWrapper>
       <HomeContainer>
