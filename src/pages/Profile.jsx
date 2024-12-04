@@ -1,5 +1,5 @@
 import { Component } from "react";
-import ThemeContext from "../utils/context/index";
+import { ThemeContext } from "../utils/context/index";
 import styled from "styled-components";
 const ProfileWrapper = styled.div``;
 const Picture = styled.img``;
