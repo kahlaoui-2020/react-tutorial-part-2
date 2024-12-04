@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useState, Component } from "react";
 import styled from "styled-components";
 import DefaultPicture from "../assets/profile.png";
 import { useTheme } from "../utils/hooks";
@@ -37,22 +37,49 @@ const CardImage = styled.img`
   align-self: center;
   border-radius: 50%;
 `;
-function Card({ label = "", title = "", picture = DefaultPicture }) {
-  const { theme } = useTheme();
-  const [isFavorite, setIsFavorite] = useState(false);
-  const star = isFavorite ? "⭐️" : "";
+// function Card({ label = "", title = "", picture = DefaultPicture }) {
+//   const { theme } = useTheme();
+//   const [isFavorite, setIsFavorite] = useState(false);
+//   const star = isFavorite ? "⭐️" : "";
 
-  return (
-    <CardWrapper theme={theme} onClick={() => setIsFavorite(!isFavorite)}>
-      <CardLabel theme={theme}>{label}</CardLabel>
-      <CardImage src={picture} alt="freelance" height={80} width={80} />
-      <CardTitle theme={theme}>
-        {star}
-        {title}
-        {star}
-      </CardTitle>
-    </CardWrapper>
-  );
+//   return (
+//     <CardWrapper theme={theme} onClick={() => setIsFavorite(!isFavorite)}>
+//       <CardLabel theme={theme}>{label}</CardLabel>
+//       <CardImage src={picture} alt="freelance" height={80} width={80} />
+//       <CardTitle theme={theme}>
+//         {star}
+//         {title}
+//         {star}
+//       </CardTitle>
+//     </CardWrapper>
+//   );
+// }
+class Card extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isFavorite: false,
+    };
+    setIsFavorite = () => {
+      this.setState({ isFavorite: !this.state.isFavorite });
+    };
+  }
+  render() {
+    const { theme, label, picture, title } = this.props;
+    const { isFavorite } = this.state;
+    const star = isFavorite ? "⭐️" : "";
+    return (
+      <CardWrapper theme={theme} onClick={this.setIsFavorite}>
+        <CardLabel theme={theme}>{label}</CardLabel>
+        <CardImage src={picture} alt="freelance" />
+        <CardTitle theme={theme}>
+          {star}
+          {title}
+          {star}
+        </CardTitle>
+      </CardWrapper>
+    );
+  }
 }
 Card.propTypes = {
   label: PropTypes.string.isRequired,
