@@ -24,43 +24,18 @@ const StyledInput = styled.input`
     outline: none;
   }
 `;
-class EmailInput extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: "",
-    };
+function EmailInput() {
+  const { theme } = useTheme();
+  const [inputValue, setInputValue] = useState("");
+  function updateInputValue(e) {
+    const val = e.target.value;
+    setInputValue(val);
   }
-  updateInputValue(value) {
-    this.setState({ value: value });
-  }
-  render() {
-    const { theme } = this.props;
-    return (
-      <InputWrapper theme={theme}>
-        <StyledLabel theme={theme}>Adresse Email</StyledLabel>
-        <StyledInput
-          theme={theme}
-          onChange={(e) => this.updateInputValue(e.target.value)}
-        ></StyledInput>
-        <input />
-      </InputWrapper>
-    );
-  }
+  return (
+    <InputWrapper theme={theme}>
+      <StyledLabel theme={theme}>Adresse Email</StyledLabel>
+      <StyledInput theme={theme} onChange={updateInputValue}></StyledInput>
+    </InputWrapper>
+  );
 }
-
-// function EmailInput() {
-//   const { theme } = useTheme();
-//   const [inputValue, setInputValue] = useState("");
-//   function updateInputValue(e) {
-//     const val = e.target.value;
-//     setInputValue(val);
-//   }
-//   return (
-//     <InputWrapper theme={theme}>
-//       <StyledLabel theme={theme}>Adresse Email</StyledLabel>
-//       <StyledInput theme={theme} onChange={updateInputValue}></StyledInput>
-//     </InputWrapper>
-//   );
-// }
 export default EmailInput;

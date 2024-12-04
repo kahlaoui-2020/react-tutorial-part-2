@@ -1,5 +1,4 @@
-import { Component } from "react";
-import { ThemeContext } from "../utils/context/index";
+import { useFetch, useTheme } from "../utils/hooks/index";
 import styled from "styled-components";
 import colors from "../utils/style/colors";
 const ProfileWrapper = styled.div`
@@ -74,56 +73,38 @@ const Price = styled.span`
   font-weight: 500;
   font-size: 20px;
 `;
-class Profile extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      profileData: {},
-    };
-  }
-  async componentDidMount() {
-    const { id } = this.props;
-    const fetchData = async () => {
-      const response = await fetch(`http://localhost:8000/freelance?id=${id}`);
-      const jsonResponse = await response.json();
-      if (jsonResponse?.profileData) {
-        this.setState({ profileData: jsonResponse.profileData });
-      }
-    };
-    fetchData();
-  }
-  render() {
-    const { profileData } = this.state;
-    const { id, name, job, location, tjm, skills, available, picture } =
-      profileData;
-    return (
-      <ThemeContext.Consumer>
-        {({ theme }) => (
-          <ProfileWrapper theme={theme}>
-            <Picture src={picture} />
-            <ProfileDetail theme={theme}>
-              <TitleWrapper>
-                <Title>{name}</Title>
-                <Location>{loacation}</Location>
-              </TitleWrapper>
-              <JobTitle>{job}</JobTitle>
-              <SkillsWrapper>
-                {skills &&
-                  skills.map((skill) => (
-                    <Skill key={`skill-${id}-${skill}`} theme={theme}>
-                      {skill}
-                    </Skill>
-                  ))}
-              </SkillsWrapper>
-              <Availability available={available}>
-                {available ? "Disponible" : "Indisponible"}
-              </Availability>
-              <Price>{tjm}€/jour</Price>
-            </ProfileDetail>
-          </ProfileWrapper>
-        )}
-      </ThemeContext.Consumer>
-    );
-  }
+
+function Profile() {
+  const { id } = useParams();
+  const { theme } = useTheme();
+  const { isLoading, data, error } = useFetch(
+    `http://localhost:8000/freelance?id=${id}`
+  );
+  const { name, job, location, tjm, skills, available, picture } = data;
+  if (error) return <span>Oups Error</span>;
+  return (
+    <ProfileWrapper theme={theme}>
+      <Picture src={picture} />
+      <ProfileDetail theme={theme}>
+        <TitleWrapper>
+          <Title>{name}</Title>
+          <Location>{location}</Location>
+        </TitleWrapper>
+        <JobTitle>{job}</JobTitle>
+        <SkillsWrapper>
+          {skills &&
+            skills.map((skill) => (
+              <Skill key={`skill-${id}-${skill}`} theme={theme}>
+                {skill}
+              </Skill>
+            ))}
+        </SkillsWrapper>
+        <Availability available={available}>
+          {available ? "Disponible" : "Indisponible"}
+        </Availability>
+        <Price>{tjm}€/jour</Price>
+      </ProfileDetail>
+    </ProfileWrapper>
+  );
 }
 export default Profile;
