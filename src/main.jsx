@@ -12,6 +12,7 @@ import Results from "./pages/Results";
 import Survey from "./pages/Survey.jsx";
 import { SurveyProvider, ThemeProvider } from "./utils/context/index.jsx";
 import StyledGlobalStyle from "./utils/style/GlobalStyle.jsx";
+import ProfileContainer from "./components/ProfileContainer.jsx";
 const GlobalContainer = styled.div`
   height: 100%;
   display: flex;
@@ -33,6 +34,7 @@ createRoot(document.getElementById("root")).render(
               <Route path="/survey/:questionNumber" element={<Survey />} />
               <Route path="/results" element={<Results />} />
               <Route path="/freelances" element={<Freelances />} />
+              <Route path="/profile/:id" element={<ProfileContainer />} />
               <Route path="*" element={<Error />} />
             </Routes>
           </Container>
